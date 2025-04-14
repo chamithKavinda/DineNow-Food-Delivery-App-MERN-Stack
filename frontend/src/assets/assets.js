@@ -18,6 +18,7 @@ import linkedin_icon from './linkedin_icon.png';
 import twitter_icon from './twitter_icon.png';
 import app_store from './app_store.png';
 import play_store from './play_store.png';
+import cross_icon from './cross_icon.png';
 
 import food_1 from './food-1.jpg';
 import food_2 from './food-2.jpg';
@@ -69,6 +70,7 @@ export const assets = {
     twitter_icon,
     app_store,
     play_store,
+    cross_icon,
 };
 
 export const menu_list = [
