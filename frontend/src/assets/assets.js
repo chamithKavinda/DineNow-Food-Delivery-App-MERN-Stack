@@ -56,6 +56,10 @@ import food_28 from './food-28.jpg';
 import food_29 from './food-29.jpg';
 import food_30 from './food-30.jpg';
 
+import bag_icon from './bag_icon.png';
+import profile_icon from './profile_icon.png';
+import logout_icon from './logout_icon.png';
+
 export const assets = {
     logo,
     search,
@@ -71,6 +75,9 @@ export const assets = {
     app_store,
     play_store,
     cross_icon,
+    bag_icon,
+    profile_icon,
+    logout_icon
 };
 
 export const menu_list = [
