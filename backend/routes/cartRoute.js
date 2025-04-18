@@ -7,6 +7,6 @@ const cartRouter = express.Router();
 // Apply auth middleware to all cart routes
 cartRouter.post('/add', authMiddleware, addToCart);
 cartRouter.post('/remove', authMiddleware, removeFromCart);
-cartRouter.get('/get', authMiddleware, getCart);
+cartRouter.post('/get', authMiddleware, getCart);
 
 export default cartRouter;
