@@ -4,23 +4,67 @@ import axios from "axios";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-  const [cartItems, setCartItems] = useState({});
+  const [cartItems, setCartItems] = useState(() => {
+    // Initialize cart from localStorage on component mount
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : {};
+  });
+  
   const url = "http://localhost:4000";
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
   const [food_list, setFoodList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const addToCart = (itemId) => {
-    if (!cartItems[itemId]) {
-      setCartItems((prev) => ({ ...prev, [itemId]: 1 }));
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    console.log("Saved cart to localStorage:", cartItems);
+  }, [cartItems]);
+
+  const addToCart = async (itemId) => {
+    const updatedCart = {...cartItems};
+    
+    if (!updatedCart[itemId]) {
+      updatedCart[itemId] = 1;
     } else {
-      setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+      updatedCart[itemId] = updatedCart[itemId] + 1;
+    }
+    
+    // Update state
+    setCartItems(updatedCart);
+    
+    // Save to localStorage immediately
+    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    
+    // Update server if logged in
+    if(token){
+      try {
+        await axios.post(url+"/api/cart/add", {itemId}, {headers:{token}});
+      } catch (err) {
+        console.error("Error adding to cart on server:", err);
+      }
     }
   };
 
-  const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+  const removeFromCart = async (itemId) => {
+    const updatedCart = {...cartItems};
+    updatedCart[itemId] = updatedCart[itemId] - 1;
+    
+    // Update state
+    setCartItems(updatedCart);
+    
+    // Save to localStorage immediately
+    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    
+    // Update server if logged in
+    if(token){
+      try {
+        await axios.post(url+"/api/cart/remove", {itemId}, {headers:{token}});
+      } catch (err) {
+        console.error("Error removing from cart on server:", err);
+      }
+    }
   };
 
   const getTotalCartAmount = () => {
@@ -53,10 +97,8 @@ const StoreContextProvider = (props) => {
       try {
         console.log(`Trying to fetch from: ${url}${endpoint}`);
         const response = await axios.get(`${url}${endpoint}`);
-        console.log(`Response from ${endpoint}:`, response);
         
         if (response.data) {
-          console.log("Data structure:", Object.keys(response.data));
           // Try different data structures
           let foodData;
           if (response.data.data) {
@@ -72,7 +114,6 @@ const StoreContextProvider = (props) => {
           }
           
           if (foodData && Array.isArray(foodData) && foodData.length > 0) {
-            console.log("Found food data:", foodData);
             setFoodList(foodData);
             setLoading(false);
             return; // Successfully found data, exit the function
@@ -108,15 +149,35 @@ const StoreContextProvider = (props) => {
     ]);
   };
 
-  useEffect(() => {
-    async function loadData() {
-      await fetchFoodList();
-      if (localStorage.getItem("token")) {
-        setToken(localStorage.getItem("token"));
+  // Try to load cart from server if user is logged in
+  const loadCartFromServer = async (userToken) => {
+    try {
+      const response = await axios.post(
+        `${url}/api/cart/get`, 
+        {}, 
+        { headers: { token: userToken } }
+      );
+      
+      if (response.data && response.data.cartItems) {
+        // Only update cart if we got data from server
+        setCartItems(response.data.cartItems);
+        localStorage.setItem("cartItems", JSON.stringify(response.data.cartItems));
       }
+    } catch (err) {
+      console.error("Error loading cart from server:", err);
+      // We'll keep using the localStorage cart if server fails
     }
-    loadData();
-  }, []);
+  };
+
+  useEffect(() => {
+    // Load food list
+    fetchFoodList();
+    
+    // Try to load cart from server if logged in
+    if (token) {
+      loadCartFromServer(token);
+    }
+  }, [token]);
 
   const contextValue = {
     food_list,
