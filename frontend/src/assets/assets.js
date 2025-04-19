@@ -53,6 +53,7 @@ import food_30 from './food-30.jpg';
 import bag_icon from './bag_icon.png';
 import profile_icon from './profile_icon.png';
 import logout_icon from './logout_icon.png';
+import parcel_icon from './parcel_icon.png';
 
 export const assets = {
     logo,
@@ -71,7 +72,8 @@ export const assets = {
     cross_icon,
     bag_icon,
     profile_icon,
-    logout_icon
+    logout_icon,
+    parcel_icon
 };
 
 export const menu_list = [

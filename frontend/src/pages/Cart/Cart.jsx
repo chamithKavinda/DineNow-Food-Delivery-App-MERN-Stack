@@ -4,7 +4,8 @@ import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 
 const Card = () => {
-  const { cartItems, food_list, removeFromCart, getTotalCartAmount, url} = useContext(StoreContext);
+  const { cartItems, food_list, removeFromCart, getTotalCartAmount, url ,clearCart} =
+    useContext(StoreContext);
 
   const navigate = useNavigate();
 
@@ -26,12 +27,14 @@ const Card = () => {
             return (
               <div>
                 <div className="cart-items-title cart-items-item">
-                  <img src={url+"/images/"+item.image} alt="" />
+                  <img src={url + "/images/" + item.image} alt="" />
                   <p>{item.name}</p>
                   <p>LKR {item.price}</p>
                   <p>{cartItems[item._id]}</p>
                   <p>LKR {item.price * cartItems[item._id]}</p>
-                  <p onClick={()=> removeFromCart(item._id)} className="cross">x</p>
+                  <p onClick={() => removeFromCart(item._id)} className="cross">
+                    x
+                  </p>
                 </div>
                 <hr />
               </div>
@@ -50,22 +53,32 @@ const Card = () => {
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>LKR {getTotalCartAmount()===0?0:450}</p>
+              <p>LKR {getTotalCartAmount() === 0 ? 0 : 450}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>LKR {getTotalCartAmount()===0?0:getTotalCartAmount()+450}</b>
+              <b>
+                LKR{" "}
+                {getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 450}
+              </b>
             </div>
           </div>
-          <button onClick={()=>navigate('/order')}>PROCEED TO CHECKOUT</button>
+          <button
+            onClick={() => {
+              clearCart();
+              navigate("/order");
+            }}
+          >
+            PROCEED TO CHECKOUT
+          </button>
         </div>
         <div className="cart-promocode">
           <div>
             <p>If you have a promo code, Enter it here</p>
             <div className="cart-promocode-input">
               <input type="text" placeholder="Promo code" />
-              <button>Submit</button> 
+              <button>Submit</button>
             </div>
           </div>
         </div>

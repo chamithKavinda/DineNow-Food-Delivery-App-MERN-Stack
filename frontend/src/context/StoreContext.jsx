@@ -179,6 +179,11 @@ const StoreContextProvider = (props) => {
     }
   }, [token]);
 
+  const clearCart = () => {
+    setCartItems({});
+  };
+  
+
   const contextValue = {
     food_list,
     cartItems,
@@ -190,7 +195,8 @@ const StoreContextProvider = (props) => {
     token,
     setToken,
     loading,
-    error
+    error,
+    clearCart
   };
 
   return (
