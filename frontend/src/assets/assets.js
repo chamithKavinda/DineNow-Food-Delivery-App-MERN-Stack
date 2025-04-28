@@ -9,6 +9,7 @@ import cake from './cake.jpg';
 import roti from './roti.jpg';
 import pasta from './pasta.jpg';
 import salad from './salad.jpg';
+import burger from './burger.jpg';
 import rating_starts from './rating_starts.png';
 import add_icon_white from './add_icon_white.png';
 import remove_icon_red from './remove_icon_red.png';
@@ -101,6 +102,10 @@ export const menu_list = [
         menu_name: 'Salad',
         menu_image: salad
     },
+    {
+        menu_name: 'Burger',
+        menu_image: burger
+    }
 ]
 
 export const food_list = [

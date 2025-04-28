@@ -15,7 +15,7 @@ const Footer = () => {
                     <img src={assets.twitter_icon} alt="" />
                 </div>
             </div>
-            <div className="footer-content-center">
+            {/* <div className="footer-content-center">
                 <h2>COMPANY</h2>
                 <ul>
                     <li>Home</li>
@@ -23,11 +23,12 @@ const Footer = () => {
                     <li>Delivery</li>
                     <li>Privacy policy</li>
                 </ul>
-            </div>
+            </div> */}
             <div className="footer-content-right">
                 <h2>GET IN TOUCH</h2>
                 <ul>
                     <li>+94 76 210 6834</li>
+                    <li>+94 77 310 6834</li>
                     <li>contact@dinenow.com</li>
                 </ul>
             </div>
